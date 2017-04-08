@@ -6,12 +6,27 @@
 
 using namespace std;
 
-int main(int argc, char** argv){
+string codigo, descifrar; 
+int numero, opc;
+string temporal;
+
+void decodificar(int numero, string & codigo){ 
 	
-	string codigo, descifrar; 
-	int numero, opc;
+	for(int i = 0; i < codigo.length(); i++){ 
+        if(codigo[i] >= 'A' && codigo[i] <= 'Z'){ 
+           	if(codigo[i] - numero>'Z'){ 
+              	  	codigo[i] = 'A' - 'Z' + codigo[i] - numero-1; 
+            }else if(codigo[i] - numero<'A'){ 
+               	codigo[i] = 'Z' - 'A' + codigo[i] - numero+1; 
+            }else{ 
+				codigo[i] -= numero; 
+            } 
+        } 
+    }
+}
+
+int main(int argc, char** argv){
 		
-	ofstream Arch("Archivito.txt", ios::in | ios::ate);
 	
 		cout<<"************MENU************"<<endl;
 		cout<<"**"<<setw(26)<<"**"<<endl;
@@ -24,10 +39,15 @@ int main(int argc, char** argv){
 		system("cls");
 		
 		switch(opc){
+			
+			if(opc==1){
 				
 				case 1:
+					
+					ofstream Arch("Archivito.txt", ios::trunc);
+					fflush(stdin);
 					cout<<"Introduce el mensaje a codificar (solo letras mayusculas): "; 
-    				cin>>codigo; 
+    				getline(cin,codigo); 
  
     				cout<<"Introduce el numero de desplazamiento deseado: "; 
     				cin >> numero; 
@@ -45,33 +65,38 @@ int main(int argc, char** argv){
         				} 
     				}
     			
-    				cout<<codigo<<endl;
-    				Arch.close();
-    				break;
-    			
-    			case 2:
-    				ofstream Arch("Archivito.txt", ios::out | ios::app);
-    				if(Arch.is_open()){
-
-    					cout<<"Introduce el numero para descifrar: ";
-    					cin>>numero;
-    					system("cls");
-    					
-    					descifrar = codigo.size()-numero;
-    				}
+    				cout<<"Mensaje codificado: "<<codigo<<endl;
     				
+    				Arch<<codigo<<endl;
     				Arch.close();
     				break;
+    			}
+    			
+    			case 2:{
+    				fflush(stdin);
+    				cout<<"Introduce el numero de desplazamiento deseado: "; 
+    				cin >> numero; 
+    				system("cls");
+    				
+					ifstream Imprimir("Archivito.txt");
+    				cout<<"Mensaje Decodificado:";
+					if(Imprimir.is_open()){
+						while(getline(Imprimir,temporal)){
+							decodificar(numero, temporal);
+							cout<<temporal<<endl;	
+						
+						}
+					}else{
+						cout<<"No se imprimio";
+					}
+					
+					Imprimir.clear();
+					Imprimir.close();
+					break;
+				}
     			
 		}
-		
-		Arch<<codigo<<endl;
 
-	
-	Arch.close();
-	
-	ifstream Arc("Archivito.txt");
-	
 	system("PAUSE");
 	
 	return 0;
