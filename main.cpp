@@ -8,7 +8,7 @@ using namespace std;
 
 int main(int argc, char** argv){
 	
-	string codigo; 
+	string codigo, descifrar; 
 	int numero, opc;
 		
 	ofstream Arch("Archivito.txt", ios::in | ios::ate);
@@ -24,28 +24,45 @@ int main(int argc, char** argv){
 		system("cls");
 		
 		switch(opc){
-			
-			case 1:
-				cout<<"Introduce el mensaje a codificar: "; 
-    			cin>>codigo; 
+				
+				case 1:
+					cout<<"Introduce el mensaje a codificar (solo letras mayusculas): "; 
+    				cin>>codigo; 
  
-    			cout<<"Introduce el numero de desplazamiento deseado: "; 
-    			cin >> numero; 
-    			system("cls");
+    				cout<<"Introduce el numero de desplazamiento deseado: "; 
+    				cin >> numero; 
+    				system("cls");
     			
-    			for (int i = 0; i < codigo.length(); i++) { 
-        			if (codigo[i] >= 'A' && codigo[i] <= 'Z') { 
-           	 			if (codigo[i] + numero>'Z') { 
-                				codigo[i] = 'A' - 'Z' + codigo[i] + numero-1; 
-            			} else if (codigo[i] + numero<'A') { 
-                						codigo[i] = 'Z' - 'A' + codigo[i] + numero+1; 
-            					} else { 
-                					codigo[i] += numero; 
-            					} 
-        			} 
-    			}
+    				for(int i = 0; i < codigo.length(); i++){ 
+        				if(codigo[i] >= 'A' && codigo[i] <= 'Z'){ 
+           	 				if(codigo[i] + numero>'Z'){ 
+              	  				codigo[i] = 'A' - 'Z' + codigo[i] + numero-1; 
+            				}else if(codigo[i] + numero<'A'){ 
+               	 			codigo[i] = 'Z' - 'A' + codigo[i] + numero+1; 
+            						}else{ 
+										codigo[i] += numero; 
+            						} 
+        				} 
+    				}
     			
-    			cout<< codigo<<endl;
+    				cout<<codigo<<endl;
+    				Arch.close();
+    				break;
+    			
+    			case 2:
+    				ofstream Arch("Archivito.txt", ios::out | ios::app);
+    				if(Arch.is_open()){
+
+    					cout<<"Introduce el numero para descifrar: ";
+    					cin>>numero;
+    					system("cls");
+    					
+    					descifrar = codigo.size()-numero;
+    				}
+    				
+    				Arch.close();
+    				break;
+    			
 		}
 		
 		Arch<<codigo<<endl;
